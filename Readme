@@ -1,0 +1,141 @@
+# 🛡️ OWASP Juice Shop - Security Assessment Report
+
+## 📋 Project Overview
+
+| **Field** | **Details** |
+|-----------|-------------|
+| **Application Tested** | OWASP Juice Shop (Deliberately Vulnerable Web Application) |
+| **Assessment Type** | Security Vulnerability Assessment & Penetration Testing |
+| **Tester Name** | Alisha Ayaz |
+| **Assessment Date** | 24 April, 2026 |
+| **Tools Used** | OWASP ZAP, Browser DevTools, cURL, Nmap |
+
+---
+
+## 🎯 Objective
+
+To identify, analyze, and document security vulnerabilities in an e-commerce product review system and provide actionable recommendations for remediation.
+
+---
+
+## 🚀 Application Setup
+
+```bash
+# Clone the repository
+git clone https://github.com/juice-shop/juice-shop.git
+
+# Navigate to project directory
+cd juice-shop
+
+# Install dependencies
+npm install
+
+# Start the application
+npm start
+
+# Access the application
+http://localhost:3000
+________________________________________
+🔍 Vulnerability Assessment Summary
+#	Vulnerability	Risk Level	Status
+1	Cookie Without SameSite Attribute	🟡 Low	Found
+2	CSP Header Not Set	🟡 Low	Found
+3	X-Content-Type-Options Missing	🟡 Low	Found
+4	X-Frame-Options Not Set	🟡 Low	Found
+5	Suspicious Developer Comments	🟡 Low	Found
+6	Server Version Information Leak	🟡 Low	Found
+7	No Rate Limiting on Reviews	🟠 Medium	Found
+8	Unsanitized User Reviews (Stored XSS)	🟠 Medium	Found
+________________________________________
+📊 Detailed Findings
+1. Cookie Without SameSite Attribute
+•	Risk Level: 🟡 Low
+•	Description: Session cookies missing SameSite attribute, vulnerable to CSRF attacks
+•	Location: Product review submission endpoint
+2. Content Security Policy (CSP) Header Not Set
+•	Risk Level: 🟡 Low
+•	Description: Missing CSP allows any script to execute regardless of origin
+•	Location: All HTML response pages
+3. X-Content-Type-Options Header Missing
+•	Risk Level: 🟡 Low
+•	Description: Missing nosniff header creates XSS opportunities
+•	Location: Static asset delivery
+4. X-Frame-Options Header Not Set
+•	Risk Level: 🟡 Low
+•	Description: Application vulnerable to clickjacking attacks
+•	Location: Entire application
+5. Information Disclosure - Suspicious Comments
+•	Risk Level: 🟡 Low
+•	Description: Developer comments expose internal logic
+•	Location: Product review page, Admin panel
+6. Server Leaks Version Information
+•	Risk Level: 🟡 Low
+•	Description: X-Powered-By header reveals Express.js version
+•	Location: All HTTP responses
+7. No Rate Limiting on Review Submission
+•	Risk Level: 🟠 Medium
+•	Description: Unlimited review submissions allowed
+•	Location: /api/submit-review endpoint
+8. User Reviews Not Sanitized Before Display
+•	Risk Level: 🟠 Medium
+•	Description: Stored XSS via unsanitized review content
+•	Location: Product review display section
+________________________________________
+🛠️ Tools Used
+Tool	Purpose
+OWASP ZAP 2.14	Automated vulnerability scanning
+Browser DevTools	Manual XSS testing, header inspection
+cURL	HTTP response header analysis
+Nmap	Port and service enumeration
+________________________________________
+📝 Testing Methodology
+Test Case	Test Input	Result
+Stored XSS in Review	<img src=x onerror=alert('XSS')>	❌ VULNERABLE
+Rate Limiting Test	100 reviews in 10 seconds	❌ VULNERABLE
+Cookie Security Check	Inspect browser storage	❌ VULNERABLE
+CSP Validation	Check response headers	❌ VULNERABLE
+Frame Embedding	Load site in iframe	❌ VULNERABLE
+________________________________________
+✅ Areas of Improvement (Priority Wise)
+🔴 High Priority (Immediate)
+#	Recommendation	Expected Outcome
+1	Sanitize all review inputs before display	Prevent stored XSS attacks
+2	Implement rate limiting on review submissions	Block spam and DoS attempts
+🟡 Medium Priority (Next Sprint)
+#	Recommendation	Expected Outcome
+3	Add SameSite attribute to cookies	Prevent CSRF attacks
+4	Implement CSP headers	Reduce XSS and injection threats
+5	Add review moderation queue	Block malicious content
+6	Add CSRF tokens to forms	Prevent cross-site request forgery
+🟢 Low Priority (Future)
+#	Recommendation	Expected Outcome
+7	Remove suspicious developer comments	Prevent information leakage
+8	Disable server version headers	Reduce attack surface
+9	Add security.txt file	Provide security contact
+10	Implement Subresource Integrity	Ensure CDN asset integrity
+________________________________________
+📈 Risk Distribution
+text
+High Risk (Critical)    ████████████████████ 0
+Medium Risk             ████████████████████ 2
+Low Risk                ████████████████████ 6
+________________________________________
+🔧 Recommended Security Headers to Implement
+http
+Content-Security-Policy: default-src 'self'
+X-Content-Type-Options: nosniff
+X-Frame-Options: SAMEORIGIN
+X-XSS-Protection: 1; mode=block
+Referrer-Policy: strict-origin-when-cross-origin
+Set-Cookie: sessionId=xyz; SameSite=Lax; Secure; HttpOnly
+________________________________________
+📌 Conclusion
+OWASP Juice Shop contains 8 distinct security vulnerabilities, categorized as:
+•	🟠 2 Medium Risk vulnerabilities (Unsanitized reviews, No rate limiting)
+•	🟡 6 Low Risk vulnerabilities (Missing headers, Info disclosure)
+Key Takeaways:
+Issue	Status
+❌ Unsanitized user reviews allowing stored XSS	Needs Immediate Fix
+❌ No rate limiting enabling abuse of review system	Needs Immediate Fix
+❌ Missing security headers across all responses	Needs Implementation
+Immediate remediation should focus on input sanitization and rate limiting, followed by security header implementation in the next development sprint.
