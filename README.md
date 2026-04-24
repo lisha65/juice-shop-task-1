@@ -1,1 +1,0 @@
-# juice-shop-task-1
