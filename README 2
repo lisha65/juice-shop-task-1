@@ -1,0 +1,144 @@
+Report Prepared By: Alisha Ayaz
+Date: 26 April, 2026
+Application Tested: OWASP Juice Shop
+Status: ✅ Security Hardening Complete
+
+README.md FILE 
+# 🛡️ OWASP Juice Shop - Complete Security Assessment
+
+## 📋 Project Overview
+
+| **Field** | **Details** |
+|-----------|-------------|
+| **Application Tested** | OWASP Juice Shop (Deliberately Vulnerable Web Application) |
+| **Assessment Type** | Security Vulnerability Assessment & Penetration Testing |
+| **Security Hardening** | Week 2 - Fixes Implementation |
+| **Tester Name** | Alisha Ayaz |
+| **Assessment Date** | 24-25 April, 2026 |
+| **Status** | ✅ Assessment Complete & Fixes Applied |
+
+---
+
+## 📂 Repository Structure
+├── Week-01-Security-Assessment/
+│ ├── Vulnerability_Report.md
+│ └── Testing_Methodology.md
+├── Week-02-Security-Fixes/
+│ ├── Fixes_Implementation.md
+│ └── Updated_Code/
+│ ├── server.js
+│ ├── package.json
+│ └── README.md
+└── Final_Submission/
+├── Security_Assessment_Report.pdf
+└── Video_Explanation_Link.txt
+
+## 🔍 Week 1: Vulnerabilities Found
+
+| # | Vulnerability | Risk Level |
+|---|---------------|------------|
+| 1 | Cookie Without SameSite Attribute | 🟡 Low |
+| 2 | CSP Header Not Set | 🟡 Low |
+| 3 | X-Content-Type-Options Missing | 🟡 Low |
+| 4 | X-Frame-Options Not Set | 🟡 Low |
+| 5 | Suspicious Developer Comments | 🟡 Low |
+| 6 | Server Version Information Leak | 🟡 Low |
+| 7 | No Rate Limiting on Reviews | 🟠 Medium |
+| 8 | Unsanitized User Reviews (Stored XSS) | 🟠 Medium |
+
+---
+
+## 🔧 Week 2: Security Fixes Applied
+
+| # | Vulnerability | Fix Applied | Status |
+|---|---------------|-------------|--------|
+| 1 | SameSite Missing | Added SameSite=Lax | ✅ Fixed |
+| 2 | CSP Missing | Implemented Helmet.js | ✅ Fixed |
+| 3 | X-Content-Type-Options | Added nosniff | ✅ Fixed |
+| 4 | X-Frame-Options | Added DENY | ✅ Fixed |
+| 5 | Developer Comments | Removed all | ✅ Fixed |
+| 6 | Server Version Leak | Disabled X-Powered-By | ✅ Fixed |
+| 7 | No Rate Limiting | Added express-rate-limit | ✅ Fixed |
+| 8 | Unsanitized Reviews | Added DOMPurify | ✅ Fixed |
+ How to Run the Secured Application
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm (v8 or higher)
+
+### Installation Steps
+
+```bash
+# Clone the original Juice Shop
+git clone https://github.com/juice-shop/juice-shop.git
+
+# Navigate to directory
+cd juice-shop
+
+# Install dependencies
+npm install
+
+# Install security packages
+npm install helmet express-rate-limit isomorphic-dompurify
+
+# Start the application
+npm start
+
+# Access the application
+http://localhost:3000
+Security Packages Installed
+Package	Purpose
+helmet	Security headers (CSP, X-Frame-Options, etc.)
+express-rate-limit	Rate limiting for review submissions
+isomorphic-dompurify	XSS sanitization for user reviews
+bcrypt	Password hashing
+validator	Input validation
+📊 Before vs After Comparison
+Test Case	Week 1 (Before)	Week 2 (After)
+XSS in Review <script>alert('XSS')</script>	❌ Script executed	✅ Script blocked
+Rate Limiting (100 reviews in 10 sec)	❌ All accepted	✅ Blocked after 5
+Cookie Security	❌ SameSite missing	✅ SameSite=Lax
+CSP Header	❌ Not present	✅ Present
+Clickjacking	❌ Vulnerable	✅ Blocked
+Server Version	❌ Visible (Express)	✅ Hidden
+🛠️ Tools Used
+Tool	Purpose
+OWASP ZAP 2.14	Automated vulnerability scanning
+Browser DevTools	Manual XSS testing
+cURL	HTTP response header analysis
+Nmap	Port and service enumeration
+✅ Final Security Checklist
+Best Practice	Status
+Input validation on all user inputs	✅ Implemented
+Passwords hashed with bcrypt	✅ Implemented
+Security headers via Helmet.js	✅ Implemented
+Rate limiting on review submissions	✅ Implemented
+Review content sanitization	✅ Implemented
+SameSite cookie attributes	✅ Implemented
+Server version hidden	✅ Implemented
+Security logging with Winston	✅ Implemented
+📝 Testing After Fixes
+Test Case	Input	Result
+Stored XSS	<img src=x onerror=alert('XSS')>	✅ Blocked
+Rate Limit Test	100 reviews in 10 seconds	✅ Blocked after 5
+Cookie Security	Inspect browser storage	✅ SameSite=Lax
+CSP Validation	Check response headers	✅ Present
+Frame Embedding	Load site in iframe	✅ Blocked
+📌 Conclusion
+Week 1 Summary:
+Found 8 vulnerabilities (2 Medium, 6 Low)
+
+Week 2 Summary:
+All 8 vulnerabilities fixed ✅
+
+Application is now significantly more secure against:
+
+Cross-Site Scripting (XSS)
+
+Cross-Site Request Forgery (CSRF)
+
+Clickjacking attacks
+
+Spam and abuse
+
+Information disclosure
